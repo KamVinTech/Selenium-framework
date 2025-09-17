@@ -38,8 +38,8 @@ public class LoginSteps {
 
     @Given("I am on the login page")
     public void iAmOnTheLoginPage() {
-        log.info("Navigating to login page");
-        driverManager.navigateToBaseUrl();
+        log.info("Navigating to login page: {}", config.getProperty("app.url"));
+        driver.get(config.getProperty("app.url") + "/login");
         Assert.assertTrue(loginPage.isPageLoaded(), "Login page is not loaded");
     }
 

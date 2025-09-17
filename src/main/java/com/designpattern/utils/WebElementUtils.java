@@ -1,5 +1,6 @@
 package com.designpattern.utils;
 
+import com.designpattern.strategy.element.ElementInteractionManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -7,8 +8,6 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.interactions.Actions;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -17,44 +16,47 @@ import java.util.Random;
 public class WebElementUtils {
     private static final Logger log = LogUtils.getLogger(WebElementUtils.class);
     private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(10);
+    private static final ElementInteractionManager interactionManager = new ElementInteractionManager();
     
     private WebElementUtils() {
         // Private constructor to prevent instantiation
     }
+
+
     
     /**
      * Safely clicks on an element with retries
      */
     public static void safeClick(WebDriver driver, WebElement element) {
-        ExceptionUtils.handleWebDriverOperation(d -> {
-            waitForElementClickable(driver, element);
-            element.click();
-            return true;
-        }, driver, "Failed to click element");
+        log.debug("Attempting to click element using all available strategies");
+        if (!interactionManager.click(driver, element, (int) DEFAULT_TIMEOUT.getSeconds())) {
+            throw new FrameworkException("Failed to click element using all available strategies");
+        }
     }
     
     /**
      * Safely enters text into an element
      */
     public static void safeType(WebDriver driver, WebElement element, String text) {
-        ExceptionUtils.handleWebDriverOperation(d -> {
-            waitForElementVisible(driver, element);
-            element.clear();
-            element.sendKeys(text);
-            return true;
-        }, driver, "Failed to type text: " + text);
+        log.debug("Attempting to type text '{}' using all available strategies", text);
+        if (!interactionManager.type(driver, element, text, (int) DEFAULT_TIMEOUT.getSeconds())) {
+            throw new FrameworkException("Failed to type text using all available strategies");
+        }
     }
     
     /**
      * Waits for element to be visible
      */
     public static WebElement waitForElementVisible(WebDriver driver, WebElement element) {
-        return ExceptionUtils.waitSafely(
+        log.debug("Waiting for element to be visible: {}", element);
+        WebElement result = ExceptionUtils.waitSafely(
             ExpectedConditions.visibilityOf(element),
             DEFAULT_TIMEOUT,
             driver,
             "Element not visible"
         );
+        log.debug("Element is now visible: {}", element);
+        return result;
     }
     
     /**
