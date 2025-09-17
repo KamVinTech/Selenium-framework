@@ -134,6 +134,28 @@ public class JavaScriptStrategy implements ElementInteractionStrategy {
     }
 
     @Override
+    public boolean isEnabled(WebDriver driver, WebElement element, int timeout) {
+        try {
+            log.debug("Checking if element is enabled using JavaScript strategy");
+            JavascriptExecutor js = (JavascriptExecutor) driver;
+            
+            Boolean isEnabled = (Boolean) js.executeScript(
+                "var elem = arguments[0];" +
+                "return !elem.disabled && " +
+                "!elem.readOnly && " +
+                "window.getComputedStyle(elem).pointerEvents !== 'none' && " +
+                "window.getComputedStyle(elem).opacity !== '0';",
+                element
+            );
+            
+            return isEnabled != null && isEnabled;
+        } catch (Exception e) {
+            log.warn("Element enabled check failed using JavaScript strategy: {}", e.getMessage());
+            return false;
+        }
+    }
+
+    @Override
     public String getStrategyName() {
         return "JavaScript Strategy";
     }

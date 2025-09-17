@@ -88,6 +88,21 @@ public class ElementInteractionManager {
     }
     
     /**
+     * Check if element is enabled using all available strategies
+     */
+    public boolean isEnabled(WebDriver driver, WebElement element, int timeout) {
+        for (ElementInteractionStrategy strategy : strategies) {
+            log.debug("Checking if element is enabled using strategy: {}", strategy.getStrategyName());
+            if (strategy.isEnabled(driver, element, timeout)) {
+                log.debug("Element is enabled according to strategy: {}", strategy.getStrategyName());
+                return true;
+            }
+        }
+        log.debug("Element is not enabled according to any strategy");
+        return false;
+    }
+    
+    /**
      * Add a custom strategy to the beginning of the strategy list
      */
     public void addStrategy(ElementInteractionStrategy strategy) {

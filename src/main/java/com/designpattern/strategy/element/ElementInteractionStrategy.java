@@ -47,6 +47,15 @@ public interface ElementInteractionStrategy {
     boolean isDisplayed(WebDriver driver, WebElement element, int timeout);
     
     /**
+     * Check if element is enabled using this strategy
+     * @param driver WebDriver instance
+     * @param element Element to check
+     * @param timeout Maximum time to wait for the operation
+     * @return true if element is enabled, false if not or if strategy couldn't check
+     */
+    boolean isEnabled(WebDriver driver, WebElement element, int timeout);
+    
+    /**
      * Get the name of this strategy for logging purposes
      * @return Strategy name
      */

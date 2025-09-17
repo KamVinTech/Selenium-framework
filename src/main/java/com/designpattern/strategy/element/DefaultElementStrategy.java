@@ -107,6 +107,18 @@ public class DefaultElementStrategy implements ElementInteractionStrategy {
     }
 
     @Override
+    public boolean isEnabled(WebDriver driver, WebElement element, int timeout) {
+        try {
+            log.debug("Checking if element is enabled using default strategy");
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeout));
+            return wait.until(ExpectedConditions.elementToBeClickable(element)) != null;
+        } catch (Exception e) {
+            log.warn("Element enabled check failed using default strategy: {}", e.getMessage());
+            return false;
+        }
+    }
+
+    @Override
     public String getStrategyName() {
         return "Default WebElement Strategy";
     }

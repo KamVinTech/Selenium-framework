@@ -1,109 +1,115 @@
 # Selenium Test Automation Framework
 
-### Framework Features: 
+## Overview
+An advanced, feature-rich Selenium test automation framework implementing industry-standard design patterns and best practices. The framework focuses on robustness, maintainability, and scalability in test automation.
+
+## Key Features
 
 ### 1. Smart Element Interaction Strategies
-
-```java
-// Strategy interface
-public interface ElementInteractionStrategy {
-    void click(WebElement element);
-    void type(WebElement element, String text);
-    void select(WebElement element);
-}
-
-// Default implementation
-public class DefaultElementStrategy implements ElementInteractionStrategy {
-    @Override
-    public void click(WebElement element) {
-        element.click();
-    }
-    // Other implementations...
-}
-
-// JavaScript implementation
-public class JavaScriptStrategy implements ElementInteractionStrategy {
-    @Override
-    public void click(WebElement element) {
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
-    }
-    // Other implementations...
-}
-
-// Usage example
-public class SmartElement {
-    private final WebElement element;
-    private final ElementInteractionManager strategyManager;
-    
-    public void click() {
-        strategyManager.executeWithFallback(strategy -> strategy.click(element));
-    }
-}
-```
+- Multi-strategy element interaction system
+- Fallback mechanism for handling complex scenarios
+- Three core strategies:
+  - Default WebDriver strategy with enhanced stability
+  - JavaScript-based interactions for complex DOM scenarios
+  - Actions API for advanced mouse and keyboard operations
+- Strategy auto-selection based on context and success rates
 
 ### 2. Dynamic Wait Mechanisms
-
-```java
-public class DynamicWait<T> {
-    public DynamicWait<T> withTimeout(Duration timeout) {
-        this.timeout = timeout;
-        return this;
-    }
-    
-    public DynamicWait<T> withProgressivePolling(boolean enable, int factor) {
-        this.progressivePolling = enable;
-        this.progressiveFactor = factor;
-        return this;
-    }
-    
-    public T until(Function<WebDriver, T> condition) {
-        // Smart waiting implementation with progressive polling
-    }
-}
-
-// Usage example
-DynamicWait<Boolean> wait = new DynamicWait<>(driver)
-    .withTimeout(Duration.ofSeconds(10))
-    .withProgressivePolling(true, 2);
-wait.until(d -> element.isDisplayed());
-```
+- Progressive polling intervals based on system state
+- Adaptive timeouts with context awareness
+- Custom wait conditions with fluent interface
+- Performance-optimized waiting strategies
+- Auto-retry with exponential backoff
 
 ### 3. Element State Validation
+- Comprehensive state checking mechanisms
+- Multi-factor validation approach
+- Performance-optimized validation
+- Custom validation rule support
+- State change monitoring capabilities
 
-```java
-public class ElementStateValidator {
-    private final WebElement element;
-    private final DynamicWait<Boolean> wait;
-    
-    public boolean isDisplayed() {
-        return wait.until(DynamicWait.Conditions.elementDisplayed(element));
-    }
-    
-    public boolean isClickable() {
-        return wait.until(DynamicWait.Conditions.elementClickable(element));
-    }
-    
-    // Other validation methods...
-}
-```
+### 4. Context-Aware Retry Mechanism
+- Dynamic retry strategies based on runtime conditions
+- Network condition analysis
+- Browser state monitoring
+- Automatic strategy adjustment
+- Custom retry rule configuration
 
-### 4. Error Recovery Mechanisms
+### 5. Self-Healing Locators
+- Alternative locator strategy generation
+- Dynamic element relocation
+- Success rate tracking
+- Automatic locator optimization
+- Failure pattern analysis
 
-```java
-public class ElementRecoveryManager {
-    private final Map<Class<? extends WebDriverException>, Function<WebElement, Boolean>> recoveryStrategies;
-    
-    public boolean attemptRecovery(WebElement element, WebDriverException exception) {
-        Function<WebElement, Boolean> strategy = recoveryStrategies.get(exception.getClass());
-        if (strategy != null) {
-            return strategy.apply(element);
-        }
-        return false;
-    }
-}
-```
+### 6. Performance Monitoring
+- Element interaction timing tracking
+- Network request monitoring
+- Resource usage tracking
+- Performance metric collection
+- Automatic bottleneck detection
 
-### 5. Core Design Patterns & Implementation Examplesements industry-standard design patterns and best practices to create a robust, maintainable, and scalable test automation solution.
+### 7. Event-Driven Monitoring
+- Real-time state change detection
+- Network activity monitoring
+- DOM mutation tracking
+- Custom event handlers
+- Asynchronous event processing
+
+### 8. Dynamic Configuration
+- Runtime configuration adjustment
+- Performance-based optimization
+- Environment-aware settings
+- Metric-driven configuration
+- Auto-tuning capabilities
+
+## Core Components
+
+1. **Design Patterns Implementation**
+   - Strategy Pattern for element interactions
+   - Singleton Pattern for resource management
+   - Factory Pattern for driver initialization
+   - Builder Pattern for test data creation
+   - Observer Pattern for event handling
+   - Command Pattern for action queueing
+
+2. **Smart Element Implementation**
+   - Enhanced WebElement wrapper
+   - Built-in retry mechanisms
+   - Automatic error recovery
+   - Performance monitoring
+   - State tracking
+   - Event handling
+
+3. **Validation Framework**
+   - Comprehensive element state checking
+   - Custom validation rules
+   - Chain validation support
+   - Async validation capabilities
+   - Result aggregation
+
+4. **Recovery Mechanisms**
+   - Automatic error detection
+   - Strategic recovery attempts
+   - Custom recovery strategies
+   - Failure analysis
+   - Session recovery
+
+5. **Configuration Management**
+   - Dynamic property adjustment
+   - Environment-based configuration
+   - Runtime optimization
+   - Profile management
+   - Remote configuration support
+
+## Technologies
+
+- Core: Java, Selenium WebDriver
+- Testing: TestNG, Cucumber
+- Reporting: ExtentReports
+- Logging: Log4j2
+- Build: Maven
+- Utilities: Lombok, WebDriverManagerements industry-standard design patterns and best practices to create a robust, maintainable, and scalable test automation solution.
 
 ### Key Components
 
@@ -449,92 +455,56 @@ public class LoginSteps {
 }
 ```
 
-## Project Structure
+### Project Structure
 
 ```
-src/
-├── main/
-│   └── java/
-│       └── com/
-│           └── designpattern/
-│               ├── core/           
-│               │   ├── element/    # Enhanced WebElement components
-│               │   │   ├── SmartElement.java
-│               │   │   └── ElementStateValidator.java
-│               │   ├── wait/       # Smart waiting mechanisms
-│               │   │   └── DynamicWait.java
-│               │   └── recovery/   # Error recovery strategies
-│               │       └── ElementRecoveryManager.java
-│               ├── strategy/       
-│               │   └── element/    # Element interaction strategies
-│               │       ├── ElementInteractionStrategy.java
-│               │       ├── DefaultElementStrategy.java
-│               │       ├── JavaScriptStrategy.java
-│               │       ├── ActionsStrategy.java
-│               │       └── ElementInteractionManager.java
-│               ├── pages/          # Page Object classes
-│               ├── data/           # Test data classes
-│               ├── reporting/      # Reporting classes
-│               └── utils/          # Utility classes
-└── test/
-    ├── java/
-    │   └── com/
-    │       └── designpattern/
-    │           ├── tests/         # TestNG test classes
-    │           ├── runners/       # Cucumber test runners
-    │           └── stepdefinitions/ # Cucumber step definitions
-    └── resources/
-        ├── features/             # Cucumber feature files
-        └── testng.xml           # TestNG configuration
+selenium-framework/
+├── src/
+│   ├── main/
+│   │   └── java/com/designpattern/
+│   │       ├── core/              # Core framework components
+│   │       ├── strategy/          # Implementation strategies
+│   │       ├── config/           # Dynamic configuration
+│   │       ├── monitoring/       # Performance & events
+│   │       ├── healing/          # Self-healing mechanisms
+│   │       ├── retry/            # Retry mechanisms
+│   │       ├── pages/            # Page objects
+│   │       └── utils/            # Utilities
+│   └── test/
+│       ├── java/                # Test implementations
+│       └── resources/           # Test configurations
+└── pom.xml
 ```
 
-## Dependencies
+## Running the Framework
 
-- Selenium WebDriver
-- TestNG
-- Cucumber
-- ExtentReports
-- WebDriverManager
-- Lombok
-- Cucumber-TestNG
-- Cucumber-PicoContainer
+1. **Prerequisites:**
+   - Java 8 or higher
+   - Maven 3.6+
+   - Chrome/Firefox/Edge browser
 
-## Getting Started
-
-1. Clone the repository
-2. Install dependencies using Maven:
+2. **Installation:**
 ```bash
 mvn clean install
 ```
-3. Configure browser settings in `src/main/resources/config.properties`
-4. Run tests using TestNG:
+
+3. **Running Tests:**
 ```bash
+# Run all tests
 mvn test
+
+# Run specific test suite
+mvn test -Dsuite=regression
+
+# Run with specific browser
+mvn test -Dbrowser=chrome
 ```
 
-## Running Tests
-
-### Running All Tests
-Use Maven to run both TestNG and Cucumber tests:
-```bash
-mvn clean test
-```
-
-### Running Specific Tests
-1. Run only TestNG tests:
-```bash
-mvn test -Dtest=*Test
-```
-
-2. Run only Cucumber features:
-```bash
-mvn test -Dtest=TestNGCucumberRunner
-```
-
-### Reports
-- TestNG reports will be generated in `test-output` directory
-- Cucumber HTML reports will be generated in `target/cucumber-reports`
-- ExtentReports will be available in `test-output/extent-report.html`
+4. **Test Reports Location:**
+   - TestNG: `test-output/index.html`
+   - Extent: `test-output/extent-report.html`
+   - Screenshots: `test-output/screenshots/`
+   - Logs: `logs/automation.log`
 
 ## Best Practices
 

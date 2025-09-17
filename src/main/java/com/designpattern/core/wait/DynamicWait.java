@@ -12,6 +12,7 @@ import java.util.function.Function;
 /**
  * Provides dynamic waiting capabilities with adaptive polling and timeouts
  */
+@SuppressWarnings("unused")
 public class DynamicWait<T> {
     private static final Logger log = LogUtils.getLogger(DynamicWait.class);
     private final WebDriver driver;
