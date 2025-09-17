@@ -1,8 +1,6 @@
 # Selenium Test Automation Framework
 
-## Framework Summary
-
-This test automation framework i### Framework Features
+### Framework Features: 
 
 ### 1. Smart Element Interaction Strategies
 
