@@ -155,4 +155,10 @@ public class ActionsStrategy implements ElementInteractionStrategy {
                location.getX() + size.getWidth() <= innerWidth &&
                location.getY() + size.getHeight() <= innerHeight;
     }
+
+    @Override
+    public boolean isEnabled(WebDriver driver, WebElement element, int timeout) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'isEnabled'");
+    }
 }

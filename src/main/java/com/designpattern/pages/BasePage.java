@@ -57,7 +57,7 @@ public abstract class BasePage {
      * @param name Name for the screenshot
      * @return Path to the screenshot
      */
-    protected String takeScreenshot(String name) {
+    public String takeScreenshot(String name) {
         return ScreenshotUtils.captureScreenshot(driver, name);
     }
 

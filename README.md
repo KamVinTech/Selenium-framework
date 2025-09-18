@@ -1,7 +1,7 @@
 # Selenium Test Automation Framework
 
 ## Overview
-An advanced, feature-rich Selenium test automation framework implementing industry-standard design patterns and best practices. The framework focuses on robustness, maintainability, and scalability in test automation.
+An advanced, AI Based, feature-rich Selenium test automation framework implementing industry-standard design patterns and best practices. The framework focuses on robustness, maintainability, and scalability in test automation.
 
 ## Key Features
 
